@@ -45,6 +45,18 @@
 #include <errno.h>
 #include <string.h>
 
+#include "randomx.h"
+
+#if defined(_MSC_VER)
+#define THREADV __declspec(thread)
+#else
+#define THREADV __thread
+#endif
+
+THREADV randomx_cache *rx_cache = NULL;
+THREADV randomx_vm *rx_vm = NULL;
+void rx_slow_hash(const void *data, size_t length, char *hash);
+
 #define MEMORY         (1 << 21) // 2MB scratchpad
 #define ITER           (1 << 20)
 #define AES_BLOCK_SIZE  16
@@ -438,12 +450,6 @@ static inline int use_v4_jit(void)
   _b1 = _b; \
   _b = _c; \
 
-#if defined(_MSC_VER)
-#define THREADV __declspec(thread)
-#else
-#define THREADV __thread
-#endif
-
 #pragma pack(push, 1)
 union cn_slow_hash_state
 {
@@ -807,6 +813,14 @@ void slow_hash_allocate_state(void)
 
 void slow_hash_free_state(void)
 {
+	if (rx_vm != NULL) {
+		randomx_destroy_vm(rx_vm);
+		rx_vm = NULL;
+	}
+	if (rx_cache != NULL) {
+		randomx_release_cache(rx_cache);
+		rx_cache = NULL;
+	}
     if(hp_state == NULL)
         return;
 
@@ -871,6 +885,10 @@ void slow_hash_free_state(void)
  */
 void cn_slow_hash(const void *data, size_t length, char *hash, int variant, int prehashed, uint64_t height)
 {
+	if (variant >= 6) {
+		rx_slow_hash(data, length, hash);
+		return;
+	}
     RDATA_ALIGN16 uint8_t expandedKey[240];  /* These buffers are aligned to use later with SSE functions */
 
     uint8_t text[INIT_SIZE_BYTE];
@@ -1019,6 +1037,14 @@ void slow_hash_allocate_state(void)
 
 void slow_hash_free_state(void)
 {
+	if (rx_vm != NULL) {
+		randomx_destroy_vm(rx_vm);
+		rx_vm = NULL;
+	}
+	if (rx_cache != NULL) {
+		randomx_release_cache(rx_cache);
+		rx_cache = NULL;
+	}
   // As above
   return;
 }
@@ -1248,6 +1274,10 @@ STATIC INLINE void aligned_free(void *ptr)
 
 void cn_slow_hash(const void *data, size_t length, char *hash, int variant, int prehashed, uint64_t height)
 {
+	if (variant >= 6) {
+		rx_slow_hash(data, length, hash);
+		return;
+	}
     RDATA_ALIGN16 uint8_t expandedKey[240];
 
 #ifndef FORCE_USE_HEAP
@@ -1464,6 +1494,10 @@ STATIC INLINE void xor_blocks(uint8_t* a, const uint8_t* b)
 
 void cn_slow_hash(const void *data, size_t length, char *hash, int variant, int prehashed, uint64_t height)
 {
+	if (variant >= 6) {
+		rx_slow_hash(data, length, hash);
+		return;
+	}
     uint8_t text[INIT_SIZE_BYTE];
     uint8_t a[AES_BLOCK_SIZE];
     uint8_t a1[AES_BLOCK_SIZE];
@@ -1592,6 +1626,14 @@ void slow_hash_allocate_state(void)
 
 void slow_hash_free_state(void)
 {
+	if (rx_vm != NULL) {
+		randomx_destroy_vm(rx_vm);
+		rx_vm = NULL;
+	}
+	if (rx_cache != NULL) {
+		randomx_release_cache(rx_cache);
+		rx_cache = NULL;
+	}
   // As above
   return;
 }
@@ -1668,6 +1710,10 @@ union cn_slow_hash_state {
 #pragma pack(pop)
 
 void cn_slow_hash(const void *data, size_t length, char *hash, int variant, int prehashed, uint64_t height) {
+	if (variant >= 6) {
+		rx_slow_hash(data, length, hash);
+		return;
+	}
 #ifndef FORCE_USE_HEAP
   uint8_t long_state[MEMORY];
 #else
@@ -1767,3 +1813,18 @@ void cn_slow_hash(const void *data, size_t length, char *hash, int variant, int 
 }
 
 #endif
+
+void rx_seedhash(const char *hash) {
+	if (rx_cache == NULL)
+		rx_cache = randomx_alloc_cache(RANDOMX_FLAG_DEFAULT);
+	randomx_init_cache(rx_cache, hash, 32);
+	if (rx_vm == NULL) {
+		rx_vm = randomx_create_vm(RANDOMX_FLAG_DEFAULT, rx_cache, NULL);
+	} else {
+		randomx_vm_set_cache(rx_vm, rx_cache);
+	}
+}
+
+void rx_slow_hash(const void *data, size_t length, char *hash) {
+	randomx_calculate_hash(rx_vm, data, length, hash);
+}
