@@ -1819,7 +1819,16 @@ void rx_seedhash(const char *hash) {
 		rx_cache = randomx_alloc_cache(RANDOMX_FLAG_DEFAULT);
 	randomx_init_cache(rx_cache, hash, 32);
 	if (rx_vm == NULL) {
-		rx_vm = randomx_create_vm(RANDOMX_FLAG_DEFAULT, rx_cache, NULL);
+		randomx_flags flags = RANDOMX_FLAG_DEFAULT;
+		if(!force_software_aes() && check_aes_hw())
+			flags |= RANDOMX_FLAG_HARD_AES;
+		if(use_v4_jit())
+			flags |= RANDOMX_FLAG_JIT;
+		rx_vm = randomx_create_vm(flags | RANDOMX_FLAG_LARGE_PAGES, rx_cache, NULL);
+		if(rx_vm == NULL) //large pages failed
+			rx_vm = randomx_create_vm(flags, rx_cache, NULL);
+		if(rx_vm == NULL) //fallback if everything fails
+			rx_vm = randomx_create_vm(RANDOMX_FLAG_DEFAULT, rx_cache, NULL);
 	} else {
 		randomx_vm_set_cache(rx_vm, rx_cache);
 	}
