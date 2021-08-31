@@ -36,7 +36,6 @@ packages:
 - "ca-certificates"
 - "python"
 - "cmake"
-- "ccache"
 - "protobuf-compiler"
 - "libdbus-1-dev"
 - "libharfbuzz-dev"
