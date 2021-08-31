@@ -46,6 +46,21 @@ EOF
 
 docker build --pull -f ${TAG}.Dockerfile -t $TAG .
 
+cd ..
+docker run -v /var/run/docker.sock:/var/run/docker.sock -d --name gitrun $TAG
+if [ -f MacOSX10.11.sdk.tar.gz ]; then
+  docker cp MacOSX10.11.sdk.tar.gz gitrun:/home/ubuntu/builder/inputs/
+else
+  echo "No MacOS SDK found, Mac builds will be omitted"
+fi
+
+fi
+
+IMAGE=`docker images | grep $TAG2`
+if [ -z "$IMAGE" ]; then
+mkdir -p docker
+cd docker
+
 # container for actually running each build
 cat <<EOF > ${TAG2}.Dockerfile
 FROM ubuntu:bionic
@@ -66,12 +81,6 @@ EOF
 docker build --pull -f ${TAG2}.Dockerfile -t $TAG2 .
 
 cd ..
-docker run -v /var/run/docker.sock:/var/run/docker.sock -d --name gitrun $TAG
-if [ -f MacOSX10.11.sdk.tar.gz ]; then
-  docker cp MacOSX10.11.sdk.tar.gz gitrun:/home/ubuntu/builder/inputs/
-else
-  echo "No MacOS SDK found, Mac builds will be omitted"
-fi
 
 fi
 
