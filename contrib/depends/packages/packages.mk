@@ -11,7 +11,7 @@ hardware_native_packages := native_protobuf
 android_native_packages = android_ndk
 android_packages = ncurses readline sodium
 
-darwin_native_packages = native_biplist native_ds_store native_mac_alias $(hardware_native_packages)
+darwin_native_packages = $(hardware_native_packages)
 darwin_packages = sodium ncurses readline $(hardware_packages)
 
 # not really native...
