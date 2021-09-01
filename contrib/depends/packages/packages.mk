@@ -1,6 +1,13 @@
 packages:=boost openssl zeromq libiconv
 
-native_packages := native_ccache
+# ccache is useless in gitian builds
+ifeq ($(GITIAN),1)
+CCACHE =
+else
+CCACHE = native_ccache
+endif
+
+native_packages := $(CCACHE)
 
 hardware_packages := hidapi protobuf libusb
 hardware_native_packages := native_protobuf

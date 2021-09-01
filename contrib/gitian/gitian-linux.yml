@@ -135,7 +135,7 @@ script: |
     fi
     export C_INCLUDE_PATH="$EXTRA_INCLUDES"
     export CPLUS_INCLUDE_PATH="$EXTRA_INCLUDES"
-    make ${MAKEOPTS} -C ${BASEPREFIX} HOST="${i}" V=1
+    make ${MAKEOPTS} -C ${BASEPREFIX} HOST="${i}" V=1 GITIAN=1
   done
 
   # Faketime for binaries
