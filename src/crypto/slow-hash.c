@@ -1065,6 +1065,7 @@ union cn_slow_hash_state
 #include <arm_neon.h>
 #ifndef __APPLE__
 #include <sys/auxv.h>
+#include <asm/hwcap.h>
 #endif
 
 STATIC INLINE int check_aes_hw(void)
