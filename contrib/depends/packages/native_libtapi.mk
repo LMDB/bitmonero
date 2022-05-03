@@ -13,7 +13,7 @@ define $(package)_config_cmds
 	-DCMAKE_BUILD_TYPR=RELEASE \
 	-DTAPI_REPOSITORY_STRING="1100.0.11" \
 	-DTAPI_FULL_VERSION="11.0.0" \
-	-DCMAKE_CXX_FLAGS="-I $PWD/../src/llvm/projects/clang/include -I $PWD/projects/clang/include" \
+	-DCMAKE_CXX_FLAGS="-I $($(package)_extract_dir)/src/llvm/projects/clang/include -I $PWD/build/projects/clang/include" \
 	../src/llvm
 endef
 

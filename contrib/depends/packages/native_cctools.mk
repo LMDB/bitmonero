@@ -34,7 +34,7 @@ define $(package)_extract_cmds
 endef
 
 define $(package)_set_vars
-$(package)_config_opts=--target=$(host) --disable-lto-support
+$(package)_config_opts=--target=$(host) --disable-lto-support --with-libtapi=$(host_prefix)
 $(package)_ldflags+=-Wl,-rpath=\\$$$$$$$$\$$$$$$$$ORIGIN/../lib
 $(package)_cc=$($(package)_extract_dir)/toolchain/bin/clang
 $(package)_cxx=$($(package)_extract_dir)/toolchain/bin/clang++
