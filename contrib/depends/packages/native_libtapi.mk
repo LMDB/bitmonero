@@ -10,7 +10,7 @@ define $(package)_config_cmds
   echo -n $(build_prefix) > INSTALLPREFIX; \
   cmake -DCMAKE_INSTALL_PREFIX=$(build_prefix) \
     -DLLVM_INCLUDE_TESTS=OFF \
-	-DCMAKE_BUILD_TYPR=RELEASE \
+	-DCMAKE_BUILD_TYPE=RELEASE \
 	-DTAPI_REPOSITORY_STRING="1100.0.11" \
 	-DTAPI_FULL_VERSION="11.0.0" \
 	-DCMAKE_CXX_FLAGS="-I $($(package)_extract_dir)/src/llvm/projects/clang/include -I $($(package)_build_dir)/projects/clang/include" \
