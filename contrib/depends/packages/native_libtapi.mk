@@ -14,7 +14,7 @@ define $(package)_config_cmds
 	-DTAPI_REPOSITORY_STRING="1100.0.11" \
 	-DTAPI_FULL_VERSION="11.0.0" \
 	-DCMAKE_CXX_FLAGS="-I $($(package)_extract_dir)/src/llvm/projects/clang/include -I $PWD/build/projects/clang/include" \
-	../src/llvm
+	$($(package)_extract_dir)/src/llvm
 endef
 
 define $(package)_build_cmds
