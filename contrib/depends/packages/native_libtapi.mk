@@ -1,0 +1,19 @@
+package=native_libtapi
+$(package)_version=664b8414f89612f2dfd35a9b679c345aa5389026
+$(package)_download_path=https://github.com/tpoechtrager/apple-libtapi/archive
+$(package)_download_file=$($(package)_version).tar.gz
+$(package)_file_name=$(package)-$($(package)_version).tar.gz
+$(package)_sha256_hash=70a7189418c2086d20c299c5d59250cf5940782c778892ccc899c66516ed240e
+$(package)_build_subdir=libtapi
+
+define $(package)_config_cmds
+  mkdir build; cd build; cmake -DCMAKE_INSTALL_PREFIX=$(build_prefix) ..
+endef
+
+define $(package)_build_cmds
+  cd build; $(MAKE)
+endef
+
+define $(package)_stage_cmds
+  cd build; $(MAKE) DESTDIR=$($(package)_staging_dir) install
+endef
