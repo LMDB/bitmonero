@@ -4,23 +4,23 @@ $(package)_download_path=https://github.com/tpoechtrager/apple-libtapi/archive
 $(package)_download_file=$($(package)_version).tar.gz
 $(package)_file_name=$(package)-$($(package)_version).tar.gz
 $(package)_sha256_hash=62e419c12d1c9fad67cc1cd523132bc00db050998337c734c15bc8d73cc02b61
-$(package)_build_subdir=libtapi
+$(package)_build_subdir=build
 
 define $(package)_config_cmds
-  mkdir build; cd build; echo -n $(build_prefix) > INSTALLPREFIX; \
-    cmake -DCMAKE_INSTALL_PREFIX=$(build_prefix) \
+  echo -n $(build_prefix) > INSTALLPREFIX; \
+  cmake -DCMAKE_INSTALL_PREFIX=$(build_prefix) \
     -DLLVM_INCLUDE_TESTS=OFF \
 	-DCMAKE_BUILD_TYPR=RELEASE \
 	-DTAPI_REPOSITORY_STRING="1100.0.11" \
 	-DTAPI_FULL_VERSION="11.0.0" \
-	-DCMAKE_CXX_FLAGS="-I $($(package)_extract_dir)/src/llvm/projects/clang/include -I $PWD/build/projects/clang/include" \
+	-DCMAKE_CXX_FLAGS="-I $($(package)_extract_dir)/src/llvm/projects/clang/include -I $PWD/projects/clang/include" \
 	$($(package)_extract_dir)/src/llvm
 endef
 
 define $(package)_build_cmds
-  cd build; $(MAKE)
+  $(MAKE)
 endef
 
 define $(package)_stage_cmds
-  cd build; $(MAKE) DESTDIR=$($(package)_staging_dir) install
+  $(MAKE) DESTDIR=$($(package)_staging_dir) install
 endef
