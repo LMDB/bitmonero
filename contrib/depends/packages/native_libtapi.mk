@@ -3,7 +3,7 @@ $(package)_version=664b8414f89612f2dfd35a9b679c345aa5389026
 $(package)_download_path=https://github.com/tpoechtrager/apple-libtapi/archive
 $(package)_download_file=$($(package)_version).tar.gz
 $(package)_file_name=$(package)-$($(package)_version).tar.gz
-$(package)_sha256_hash=70a7189418c2086d20c299c5d59250cf5940782c778892ccc899c66516ed240e
+$(package)_sha256_hash=62e419c12d1c9fad67cc1cd523132bc00db050998337c734c15bc8d73cc02b61
 $(package)_build_subdir=libtapi
 
 define $(package)_config_cmds
