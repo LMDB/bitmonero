@@ -8,7 +8,7 @@ $(package)_build_subdir=build
 
 define $(package)_config_cmds
   echo -n $(build_prefix) > INSTALLPREFIX; \
-  CC=gcc-8 C++=g++-8 \
+  CC=gcc-8 CXX=g++-8 \
   cmake -DCMAKE_INSTALL_PREFIX=$(build_prefix) \
     -DLLVM_INCLUDE_TESTS=OFF \
 	-DCMAKE_BUILD_TYPE=RELEASE \
