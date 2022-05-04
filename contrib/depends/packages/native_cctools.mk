@@ -10,8 +10,8 @@ $(package)_dependencies=native_clang native_libtapi
 define $(package)_set_vars
 $(package)_config_opts=--target=$(host) --disable-lto-support --with-libtapi=$(host_prefix)
 $(package)_ldflags+=-Wl,-rpath=\\$$$$$$$$\$$$$$$$$ORIGIN/../lib
-$(package)_cc=clang
-$(package)_cxx=clang++
+$(package)_cc=$(host_prefix)/native/bin/clang
+$(package)_cxx=$(host_prefix)/native/bin/clang++
 endef
 
 define $(package)_config_cmds

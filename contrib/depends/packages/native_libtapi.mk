@@ -9,7 +9,7 @@ $(package)_dependencies=native_clang
 
 define $(package)_config_cmds
   echo -n $(build_prefix) > INSTALLPREFIX; \
-  CC=clang CXX=clang++ \
+  CC=$(host_prefix)/native/bin/clang CXX=$(host_prefix)/native/bin/clang++ \
   cmake -DCMAKE_INSTALL_PREFIX=$(build_prefix) \
     -DLLVM_INCLUDE_TESTS=OFF \
 	-DCMAKE_BUILD_TYPE=RELEASE \
