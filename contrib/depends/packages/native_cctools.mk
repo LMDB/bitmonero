@@ -5,13 +5,13 @@ $(package)_download_file=$($(package)_version).tar.gz
 $(package)_file_name=$(package)-$($(package)_version).tar.gz
 $(package)_sha256_hash=70a7189418c2086d20c299c5d59250cf5940782c778892ccc899c66516ed240e
 $(package)_build_subdir=cctools
-$(package)_dependencies=native_libtapi
+$(package)_dependencies=native_clang native_libtapi
 
 define $(package)_set_vars
 $(package)_config_opts=--target=$(host) --disable-lto-support --with-libtapi=$(host_prefix)
 $(package)_ldflags+=-Wl,-rpath=\\$$$$$$$$\$$$$$$$$ORIGIN/../lib
-$(package)_cc=clang-10
-$(package)_cxx=clang++-10
+$(package)_cc=clang
+$(package)_cxx=clang++
 endef
 
 define $(package)_config_cmds

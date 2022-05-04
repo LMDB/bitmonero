@@ -8,7 +8,6 @@ architectures:
 packages:
 - "ca-certificates"
 - "curl"
-- "clang-10"
 - "g++"
 - "git"
 - "pkg-config"
