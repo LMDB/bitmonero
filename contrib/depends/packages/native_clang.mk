@@ -2,7 +2,7 @@ package=native_clang
 $(package)_version=9.0.0
 $(package)_download_path=https://releases.llvm.org/$($(package)_version)
 $(package)_download_file=clang+llvm-$($(package)_version)-x86_64-linux-gnu-ubuntu-14.04.tar.xz
-$(package)_file_name=clang-llvm-$($(package)_version)-x86_64-linux-gnu-ubuntu-14.04.tar.xz
+$(package)_file_name=clang-llvm-$($(package)_version)-x86_64-linux-gnu-ubuntu-18.04.tar.xz
 $(package)_sha256_hash=a23b082b30c128c9831dbdd96edad26b43f56624d0ad0ea9edec506f5385038d
 
 define $(package)_extract_cmds
