@@ -5,7 +5,7 @@
                  options = -arch$(_)$(instruction-set) ;
              } else {
 -                options = -arch arm ;
-+                options = -arch arm64 ;
++#                options = -arch arm ;
              }
          }
      }
